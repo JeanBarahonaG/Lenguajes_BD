@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Conexiones;
 
 import Clases.Proveerdor;
@@ -11,10 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-/**
- *
- * @author Jeanca Barahona
- */
 public class ProveerdorBD {
 
     public ArrayList<Proveerdor> ListProveedor() {
@@ -23,7 +15,7 @@ public class ProveerdorBD {
 
             Connection cnx = ConexionOracle.getConnection();
             Statement st = cnx.createStatement();
-            ResultSet rs = st.executeQuery("SELECT ID,MARCA,CIUDAD,NOMBRE,EMAIL,TELEFONO   " + "   FROM PROVEEDOR ");
+            ResultSet rs = st.executeQuery("SELECT ID,MARCA,CIUDAD,NOMBRE,EMAIL,TELEFONO   " + "   FROM PROVEEDOR ORDER BY 2 ");
 
             while (rs.next()) {
                 Proveerdor pv = new Proveerdor();
@@ -33,6 +25,7 @@ public class ProveerdorBD {
                 pv.setNombre(rs.getString("NOMBRE"));
                 pv.setEmail(rs.getString("EMAIL"));
                 pv.setTelefono(rs.getString("TELEFONO"));
+                proveedor.add(pv);
             }
 
         } catch (SQLException ex) {

@@ -30,6 +30,13 @@ public class Proveedor extends javax.swing.JFrame {
         }
     }
 
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tblTabla.getModel();
+        for(int i=tb.getRowCount()-1; i>=0; i--){
+            tb.removeRow(i);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -42,10 +49,7 @@ public class Proveedor extends javax.swing.JFrame {
 
         tblTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "MARCA", "CIUDAD", "NOMBRE", "EMAIL", "TELEFONO"
@@ -85,6 +89,8 @@ public class Proveedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        
+        limpiar();
         ListarDatos();
     }//GEN-LAST:event_btnListarActionPerformed
 
