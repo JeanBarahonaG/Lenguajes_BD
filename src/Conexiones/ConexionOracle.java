@@ -15,7 +15,7 @@ public class ConexionOracle {
             String usuario = "cursosabado";
             String password = "123456";
             //Connection cnx = DriverManager.getConnection(myDB, usuario, password);
-            System.out.println("Conexion Hechaaaa");
+            System.out.println("Conexion Hecha");
             return DriverManager.getConnection(myDB, usuario, password);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
