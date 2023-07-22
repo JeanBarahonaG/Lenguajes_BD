@@ -24,6 +24,16 @@ public class Proveedor extends javax.swing.JFrame {
         limpiar();
         ListarDatos();
     }
+    
+    public void limpiarCampos() {
+    txtID.setText("");
+    txtMarca.setText("");
+    txtCiudad.setText("");
+    txtNombre.setText("");
+    txtEmail.setText("");
+    txtTelefono.setText("");
+    }
+
 
     public void ListarDatos() {
         proveedor = db.ListProveedor();
@@ -56,7 +66,50 @@ public class Proveedor extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Faltan Datos /n Favor completar todo", "", JOptionPane.ERROR_MESSAGE);
         }
+        
+    
     }
+    public void eliminar() {
+        
+        String texto = txtID.getText();
+       if (!texto.isEmpty()) {
+        int idProveedor = Integer.parseInt(texto);
+        db.eliminarProveedorPorID(idProveedor);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+        
+        
+    }
+    }
+    
+    public void actualizar(){
+       //String id = txtID.getText();
+       
+       Proveerdor pv = new Proveerdor();
+        pv.setId(Integer.parseInt(txtID.getText()));
+        pv.setMarca(txtMarca.getText());
+        pv.setCiudad(txtCiudad.getText());
+        pv.setNombre(txtNombre.getText());
+        pv.setEmail(txtEmail.getText());
+        pv.setTelefono(txtTelefono.getText());
+        if (!"".equals(txtID.getText()) && !"".equals(txtNombre.getText())) {
+            JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+            db.modificarProveedor(pv);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Datos no actualizados", "", JOptionPane.ERROR_MESSAGE);
+        }
+       
+       
+       
+    }
+    
+    
+   
+    
     
     //public void 
 
@@ -87,12 +140,12 @@ public class Proveedor extends javax.swing.JFrame {
         jScrollPane7 = new javax.swing.JScrollPane();
         txtTelefono = new javax.swing.JTextPane();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        BtnNuevo = new javax.swing.JButton();
+        BtnActualizar = new javax.swing.JButton();
+        BtnGuardar = new javax.swing.JButton();
+        BtnEliminar = new javax.swing.JButton();
+        BtnBuscar = new javax.swing.JButton();
+        BtnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +157,11 @@ public class Proveedor extends javax.swing.JFrame {
                 "ID", "MARCA", "CIUDAD", "NOMBRE", "EMAIL", "TELEFONO"
             }
         ));
+        tblTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblTabla);
 
         btnListar.setText("Listar");
@@ -134,6 +192,11 @@ public class Proveedor extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Telefono");
 
+        txtID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIDKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(txtID);
 
         jScrollPane3.setViewportView(txtMarca);
@@ -160,14 +223,15 @@ public class Proveedor extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4)
-                    .addComponent(jScrollPane5)
-                    .addComponent(jScrollPane6)
-                    .addComponent(jScrollPane7))
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4)
+                        .addComponent(jScrollPane5)
+                        .addComponent(jScrollPane7))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,30 +272,35 @@ public class Proveedor extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 102, 255));
         jPanel2.setForeground(new java.awt.Color(51, 102, 255));
 
-        jButton1.setText("Nuevo");
+        BtnNuevo.setText("Nuevo");
 
-        jButton2.setText("Actualizar");
-
-        jButton3.setText("Guardar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        BtnActualizar.setText("Actualizar");
+        BtnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                BtnActualizarActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Eliminar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        BtnGuardar.setText("Guardar");
+        BtnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                BtnGuardarActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Buscar");
-
-        jButton6.setText("Salir");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        BtnEliminar.setText("Eliminar");
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                BtnEliminarActionPerformed(evt);
+            }
+        });
+
+        BtnBuscar.setText("Buscar");
+
+        BtnSalir.setText("Salir");
+        BtnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnSalirActionPerformed(evt);
             }
         });
 
@@ -242,14 +311,14 @@ public class Proveedor extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(55, 55, 55)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(BtnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BtnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16))
         );
         jPanel2Layout.setVerticalGroup(
@@ -257,16 +326,16 @@ public class Proveedor extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(BtnNuevo)
+                    .addComponent(BtnActualizar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
+                    .addComponent(BtnEliminar)
+                    .addComponent(BtnGuardar))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(BtnBuscar)
+                    .addComponent(BtnSalir))
                 .addGap(27, 27, 27))
         );
 
@@ -290,7 +359,7 @@ public class Proveedor extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -313,17 +382,50 @@ public class Proveedor extends javax.swing.JFrame {
         //ListarDatos();
     }//GEN-LAST:event_btnListarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        eliminar();
+    }//GEN-LAST:event_BtnEliminarActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_BtnSalirActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
         insertar();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_BtnGuardarActionPerformed
+
+    private void tblTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTablaMouseClicked
+        int rowIndex = tblTabla.getSelectedRow();
+
+    if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+        DefaultTableModel model = (DefaultTableModel) tblTabla.getModel();
+
+        // Obtener los valores de la fila seleccionada
+        int id = (int) model.getValueAt(rowIndex, 0);
+        String marca = model.getValueAt(rowIndex, 1).toString();
+        String ciudad = model.getValueAt(rowIndex, 2).toString();
+        String nombre = model.getValueAt(rowIndex, 3).toString();
+        String email = model.getValueAt(rowIndex, 4).toString();
+        String telefono = model.getValueAt(rowIndex, 5).toString();
+
+        // Asignar los valores a los campos de texto correspondientes
+        txtID.setText(String.valueOf(id));
+        txtMarca.setText(marca);
+        txtCiudad.setText(ciudad);
+        txtNombre.setText(nombre);
+        txtEmail.setText(email);
+        txtTelefono.setText(telefono);
+    }
+    }//GEN-LAST:event_tblTablaMouseClicked
+
+    private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
+        actualizar();
+        
+    }//GEN-LAST:event_BtnActualizarActionPerformed
+
+    private void txtIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDKeyReleased
+        
+    }//GEN-LAST:event_txtIDKeyReleased
 
     /**
      * @param args the command line arguments
@@ -362,13 +464,13 @@ public class Proveedor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnActualizar;
+    private javax.swing.JButton BtnBuscar;
+    private javax.swing.JButton BtnEliminar;
+    private javax.swing.JButton BtnGuardar;
+    private javax.swing.JButton BtnNuevo;
+    private javax.swing.JButton BtnSalir;
     private javax.swing.JButton btnListar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class ProveerdorBD {
 
@@ -56,6 +57,52 @@ public class ProveerdorBD {
         }
     }
     
+    
+    public void eliminarProveedorPorID(int idProveedor) {
+    try {
+        Connection cnx = ConexionOracle.getConnection();
+        PreparedStatement pst = cnx.prepareStatement("DELETE FROM PROVEEDOR WHERE ID = ?");
+        pst.setInt(1, idProveedor);
+        int filasAfectadas = pst.executeUpdate();
+        if (filasAfectadas > 0) {
+            System.out.println("Proveedor con ID " + idProveedor + " eliminado correctamente");
+        } else {
+            System.out.println("No se encontró ningún proveedor con el ID " + idProveedor);
+        }
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+        System.err.println("Error al eliminar el proveedor con ID " + idProveedor);
+    }
+}
+
+    
+    public void modificarProveedor(Proveerdor proveedor) {
+    try {
+        Connection cnx = ConexionOracle.getConnection();
+        PreparedStatement pst = cnx.prepareStatement("UPDATE PROVEEDOR SET MARCA = ?, CIUDAD = ?, NOMBRE = ?, EMAIL = ?, TELEFONO = ? WHERE ID = ?");
+        pst.setString(1, proveedor.getMarca());
+        pst.setString(2, proveedor.getCiudad());
+        pst.setString(3, proveedor.getNombre());
+        pst.setString(4, proveedor.getEmail());
+        pst.setString(5, proveedor.getTelefono());
+        pst.setInt(6, proveedor.getId());
+        int filasAfectadas = pst.executeUpdate();
+        if (filasAfectadas > 0) {
+            System.out.println("actualizada");  
+        } else {
+            
+            System.out.println("no se actualizo");
+            }
+        cnx.close();
+    } catch (SQLException ex) {
+        
+        System.err.println(ex.getMessage());
+    }
+}
+
+    
+    
+
 //        public void modificarProveedor(Proveerdor proveedor) {
 //        try {
 //            Connection cnx = ConexionOracle.getConnection();
