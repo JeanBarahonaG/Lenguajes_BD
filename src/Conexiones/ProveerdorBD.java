@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 public class ProveerdorBD {
 
