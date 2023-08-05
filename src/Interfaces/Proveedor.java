@@ -99,10 +99,32 @@ public class Proveedor extends javax.swing.JFrame {
             limpiarCampos();
         } else {
             JOptionPane.showMessageDialog(this, "Datos no actualizados", "", JOptionPane.ERROR_MESSAGE);
-        }
-
     }
+    }
+    
+    public void buscar() {
+    String texto = txtID.getText();
+    if (!texto.isEmpty()) {
+        int idProveedor = Integer.parseInt(texto);
+        Proveerdor pvEncontrado = db.buscarProveedorPorID(idProveedor);
 
+        if (pvEncontrado != null) {
+            // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+            txtID.setText(String.valueOf(pvEncontrado.getId()));
+            txtMarca.setText(pvEncontrado.getMarca());
+            txtCiudad.setText(pvEncontrado.getCiudad());
+            txtNombre.setText(pvEncontrado.getNombre());
+            txtEmail.setText(pvEncontrado.getEmail());
+            txtTelefono.setText(pvEncontrado.getTelefono());
+
+            JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idProveedor, "", JOptionPane.WARNING_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
+    }
+}
     //public void 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -409,7 +431,7 @@ public class Proveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     /**

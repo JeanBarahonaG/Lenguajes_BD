@@ -99,27 +99,34 @@ public class ProveerdorBD {
     }
 }
 
+    public Proveerdor buscarProveedorPorID(int idProveedor) {
+    Proveerdor proveedorEncontrado = null;
+
+    try {
+        Connection cnx = ConexionOracle.getConnection();
+        PreparedStatement pst = cnx.prepareStatement("SELECT ID, MARCA, CIUDAD, NOMBRE, EMAIL, TELEFONO " +
+                "FROM PROVEEDOR WHERE ID = ?");
+        pst.setInt(1, idProveedor);
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            proveedorEncontrado = new Proveerdor();
+            proveedorEncontrado.setId(rs.getInt("ID"));
+            proveedorEncontrado.setMarca(rs.getString("MARCA"));
+            proveedorEncontrado.setCiudad(rs.getString("CIUDAD"));
+            proveedorEncontrado.setNombre(rs.getString("NOMBRE"));
+            proveedorEncontrado.setEmail(rs.getString("EMAIL"));
+            proveedorEncontrado.setTelefono(rs.getString("TELEFONO"));
+        }
+
+        cnx.close();
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+    }
+
+    return proveedorEncontrado;
+}
+
     
     
-
-//        public void modificarProveedor(Proveerdor proveedor) {
-//        try {
-//            Connection cnx = ConexionOracle.getConnection();
-//            PreparedStatement pst = cnx.prepareStatement("UPDATE PROVEEDOR SET MARCA = ?, CIUDAD = ?, NOMBRE = ?, EMAIL = ?, TELEFONO = ?" 
-//            + "  WHERE ID = ?");
-//            
-//            pst.setString(1, proveedor.getMarca());
-//            pst.setString(2, proveedor.getCiudad());
-//            pst.setString(3, proveedor.getNombre());
-//            pst.setString(4, proveedor.getEmail());
-//            pst.setString(5, proveedor.getTelefono());
-//            pst.setInt(6, proveedor.getId());
-//            pst.execute();
-//            System.out.println("Modificado correctamente");
-//        } catch (SQLException ex) {
-//            System.err.println(ex.getMessage());
-//            System.err.println("Error en insertar");
-//        }
-//    }
-
 }
