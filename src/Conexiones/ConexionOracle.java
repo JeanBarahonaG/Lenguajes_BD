@@ -11,7 +11,7 @@ public class ConexionOracle {
     public static Connection getConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            String myDB = "jdbc:oracle:thin:@localhost:1521:xe";
+            String myDB = "jdbc:oracle:thin:@localhost:1521:orcl";
             String usuario = "cursosabado";
             String password = "123456";
             //Connection cnx = DriverManager.getConnection(myDB, usuario, password);
