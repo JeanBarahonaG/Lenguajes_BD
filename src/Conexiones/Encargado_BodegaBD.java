@@ -4,7 +4,7 @@
  */
 package Conexiones;
 
-import Clases.Encargado_Bodega;
+import Clases.Encargados_Bodega;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,10 +16,10 @@ import java.util.ArrayList;
  *
  * @author Jeanca Barahona
  */
-public class Encaegado_BodegaBD {
+public class Encargado_BodegaBD {
 
-    public ArrayList<Encargado_Bodega> ListEncargado() {
-        ArrayList<Encargado_Bodega> encargado = new ArrayList();
+    public ArrayList<Encargados_Bodega> ListEncargado() {
+        ArrayList<Encargados_Bodega> encargado = new ArrayList();
         try {
 
             Connection cnx = ConexionOracle.getConnection();
@@ -27,7 +27,7 @@ public class Encaegado_BodegaBD {
             ResultSet rs = st.executeQuery("SELECT ID,NOMBRE,TELEFONO,DIRECCION,EMAIL   " + "   FROM ENCARGADO_BODEGA ORDER BY 2");
 
             while (rs.next()) {
-                Encargado_Bodega eb = new Encargado_Bodega();
+                Encargados_Bodega eb = new Encargados_Bodega();
                 eb.setId(rs.getInt("ID"));
                 eb.setNombre(rs.getString("NOMBRE"));
                 eb.setTelefono(rs.getString("TELEFONO"));
@@ -44,7 +44,7 @@ public class Encaegado_BodegaBD {
         return encargado;
     }
 
-    public void insertarEncargado(Encargado_Bodega encargado) {
+    public void insertarEncargado(Encargados_Bodega encargado) {
 
         try {
             Connection cnx = ConexionOracle.getConnection();

@@ -4,9 +4,9 @@
  */
 package Interfaces;
 
-import Clases.Encargado_Bodega;
-import Clases.Proveerdor;
-import Conexiones.Encaegado_BodegaBD;
+
+import Clases.Encargados_Bodega;
+import Conexiones.Encargado_BodegaBD;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,12 +14,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Jeanca Barahona
  */
-public class Encaragado_Bodega extends javax.swing.JFrame {
+public class Encargado_Bodega extends javax.swing.JFrame {
 
-    ArrayList<Encargado_Bodega> encargado;
-    Encaegado_BodegaBD db = new Encaegado_BodegaBD();
+    ArrayList<Encargados_Bodega> encargado;
+    Encargado_BodegaBD db = new Encargado_BodegaBD();
 
-    public Encaragado_Bodega() {
+    public Encargado_Bodega() {
         initComponents();
         ListarDatos();
         setLocationRelativeTo(null);
@@ -31,7 +31,7 @@ public class Encaragado_Bodega extends javax.swing.JFrame {
     public void ListarDatos() {
         encargado = db.ListEncargado();
         DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
-        for (Encargado_Bodega eb : encargado) {
+        for (Encargados_Bodega eb : encargado) {
             tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
         }
     }
@@ -334,20 +334,23 @@ public class Encaragado_Bodega extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Encaragado_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Encargados_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Encaragado_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Encargados_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Encaragado_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Encargados_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Encaragado_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Encargados_Bodega.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Encaragado_Bodega().setVisible(true);
+                new Encargado_Bodega().setVisible(true);
             }
         });
     }

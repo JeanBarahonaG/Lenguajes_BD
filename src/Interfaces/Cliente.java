@@ -4,9 +4,9 @@
  */
 package Interfaces;
 
-import Clases.Encargado_Bodega;
+import Clases.Encargados_Bodega;
 import Clases.Proveerdor;
-import Conexiones.Encaegado_BodegaBD;
+import Conexiones.Encargado_BodegaBD;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 

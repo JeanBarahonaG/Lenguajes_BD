@@ -8,7 +8,7 @@ package Clases;
  *
  * @author Jeanca Barahona
  */
-public class Encargado_Bodega {
+public class Vendedor {
     
     int id;
     String nombre;
@@ -16,15 +16,15 @@ public class Encargado_Bodega {
     String direccion;
     String email;
 
-    public Encargado_Bodega() {
-    }
-
-    public Encargado_Bodega(int id, String nombre, String telefono, String direccion, String email) {
+    public Vendedor(int id, String nombre, String telefono, String direccion, String email) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.direccion = direccion;
         this.email = email;
+    }
+
+    public Vendedor() {
     }
 
     public int getId() {
@@ -68,6 +68,5 @@ public class Encargado_Bodega {
     }
     
     
+    
 }
-
- 
