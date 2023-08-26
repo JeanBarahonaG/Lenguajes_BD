@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaces;
-
 
 import Clases.Encargados_Bodega;
 import Conexiones.Encargado_BodegaBD;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,11 +24,94 @@ public class Encargado_Bodega extends javax.swing.JFrame {
         setTitle("Encargados de bodega");
     }
 
+    public void limpiarCampos() {
+        txtID.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtDireccion.setText("");
+        txtEmail.setText("");
+        txtTelefono.setText("");
+    }
+
     public void ListarDatos() {
         encargado = db.ListEncargado();
         DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
         for (Encargados_Bodega eb : encargado) {
             tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
+        }
+    }
+
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
+        for (int i = tb.getRowCount() - 1; i >= 0; i--) {
+            tb.removeRow(i);
+        }
+    }
+
+    public void insertar() {
+        Encargados_Bodega eb = new Encargados_Bodega();
+        eb.setId(Integer.parseInt(txtID.getText()));
+        eb.setNombre(txtNombre.getText());
+        eb.setTelefono(txtTelefono.getText());
+        eb.setDireccion(txtDireccion.getText());
+        eb.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarEncargado(eb);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+
+    }
+
+    public void eliminar() {
+
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idEncargadoB = Integer.parseInt(texto);
+            db.eliminarEncargadoBPorID(idEncargadoB);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+
+        }
+    }
+
+    public void actualizar() {
+        //String id = txtID.getText();
+
+        Encargados_Bodega eb = new Encargados_Bodega();
+        eb.setId(Integer.parseInt(txtID.getText()));
+        eb.setNombre(txtNombre.getText());
+        eb.setTelefono(txtTelefono.getText());
+        eb.setDireccion(txtDireccion.getText());
+        eb.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarEncargados_Bodega(eb);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+    }
+
+    public void buscar() {
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idEncargadoB = Integer.parseInt(texto);
+            Encargados_Bodega ebEncontrado = db.buscarEncargadoBPorID(idEncargadoB);
+
+            if (ebEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(ebEncontrado.getId()));
+                txtNombre.setText(ebEncontrado.getNombre());
+                txtTelefono.setText(ebEncontrado.getTelefono());
+                txtDireccion.setText(ebEncontrado.getDireccion());
+                txtEmail.setText(ebEncontrado.getEmail());
+
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idEncargadoB, "", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -54,14 +133,14 @@ public class Encargado_Bodega extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtID = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtMarca = new javax.swing.JTextPane();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        txtCiudad = new javax.swing.JTextPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
         txtNombre = new javax.swing.JTextPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        txtTelefono = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtEmail = new javax.swing.JTextPane();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDireccion = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         BtnActualizar = new javax.swing.JButton();
         BtnGuardar = new javax.swing.JButton();
@@ -97,19 +176,19 @@ public class Encargado_Bodega extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(txtID);
 
-        jScrollPane3.setViewportView(txtMarca);
+        jScrollPane3.setViewportView(txtNombre);
 
-        jScrollPane4.setViewportView(txtCiudad);
+        jScrollPane4.setViewportView(txtTelefono);
 
-        jScrollPane5.setViewportView(txtNombre);
+        jScrollPane5.setViewportView(txtEmail);
 
         jLabel6.setBackground(new java.awt.Color(204, 204, 204));
         jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Direccion");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        jScrollPane1.setViewportView(txtDireccion);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -260,6 +339,11 @@ public class Encargado_Bodega extends javax.swing.JFrame {
                 "ID", "Nombre", "Telefono", "Direccion", "Email"
             }
         ));
+        tablaEncargado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaEncargadoMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(tablaEncargado);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -287,7 +371,7 @@ public class Encargado_Bodega extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -298,24 +382,47 @@ public class Encargado_Bodega extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
-        //actualizar();
+        actualizar();
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        //insertar();
+        insertar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        //eliminar();
+        eliminar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_BtnSalirActionPerformed
+
+    private void tablaEncargadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEncargadoMouseClicked
+        int rowIndex = tablaEncargado.getSelectedRow();
+
+        if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+            DefaultTableModel model = (DefaultTableModel) tablaEncargado.getModel();
+
+            // Obtener los valores de la fila seleccionada
+            int id = (int) model.getValueAt(rowIndex, 0);
+            String nombre = model.getValueAt(rowIndex, 1).toString();
+            String telefono = model.getValueAt(rowIndex, 2).toString();
+            String direccion = model.getValueAt(rowIndex, 3).toString();
+            String email = model.getValueAt(rowIndex, 4).toString();
+
+            // Asignar los valores a los campos de texto correspondientes
+            txtID.setText(String.valueOf(id));
+            txtNombre.setText(nombre);
+            txtTelefono.setText(telefono);
+            txtDireccion.setText(direccion);
+            txtEmail.setText(email);
+
+        }
+    }//GEN-LAST:event_tablaEncargadoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -375,11 +482,11 @@ public class Encargado_Bodega extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTable tablaEncargado;
-    private javax.swing.JTextPane txtCiudad;
+    private javax.swing.JTextArea txtDireccion;
+    private javax.swing.JTextPane txtEmail;
     private javax.swing.JTextPane txtID;
-    private javax.swing.JTextPane txtMarca;
     private javax.swing.JTextPane txtNombre;
+    private javax.swing.JTextPane txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

@@ -57,14 +57,11 @@ public class Proveedor extends javax.swing.JFrame {
         pv.setNombre(txtNombre.getText());
         pv.setEmail(txtEmail.getText());
         pv.setTelefono(txtTelefono.getText());
-        if (!"".equals(txtID.getText()) && !"".equals(txtNombre.getText())) {
-            JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
-            db.insertarProveedor(pv);
-            limpiar();
-            ListarDatos();
-        } else {
-            JOptionPane.showMessageDialog(this, "Faltan Datos /n Favor completar todo", "", JOptionPane.ERROR_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarProveedor(pv);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
 
     }
 
@@ -91,40 +88,37 @@ public class Proveedor extends javax.swing.JFrame {
         pv.setNombre(txtNombre.getText());
         pv.setEmail(txtEmail.getText());
         pv.setTelefono(txtTelefono.getText());
-        if (!"".equals(txtID.getText()) && !"".equals(txtNombre.getText())) {
-            JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
-            db.modificarProveedor(pv);
-            limpiar();
-            ListarDatos();
-            limpiarCampos();
-        } else {
-            JOptionPane.showMessageDialog(this, "Datos no actualizados", "", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarProveedor(pv);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
     }
-    }
-    
+
     public void buscar() {
-    String texto = txtID.getText();
-    if (!texto.isEmpty()) {
-        int idProveedor = Integer.parseInt(texto);
-        Proveerdor pvEncontrado = db.buscarProveedorPorID(idProveedor);
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idProveedor = Integer.parseInt(texto);
+            Proveerdor pvEncontrado = db.buscarProveedorPorID(idProveedor);
 
-        if (pvEncontrado != null) {
-            // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
-            txtID.setText(String.valueOf(pvEncontrado.getId()));
-            txtMarca.setText(pvEncontrado.getMarca());
-            txtCiudad.setText(pvEncontrado.getCiudad());
-            txtNombre.setText(pvEncontrado.getNombre());
-            txtEmail.setText(pvEncontrado.getEmail());
-            txtTelefono.setText(pvEncontrado.getTelefono());
+            if (pvEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(pvEncontrado.getId()));
+                txtMarca.setText(pvEncontrado.getMarca());
+                txtCiudad.setText(pvEncontrado.getCiudad());
+                txtNombre.setText(pvEncontrado.getNombre());
+                txtEmail.setText(pvEncontrado.getEmail());
+                txtTelefono.setText(pvEncontrado.getTelefono());
 
-            JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idProveedor, "", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idProveedor, "", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
     }
-}
+
     //public void 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

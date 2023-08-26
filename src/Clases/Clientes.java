@@ -8,8 +8,8 @@ package Clases;
  *
  * @author Jeanca Barahona
  */
-public class Cliente {
-    
+public class Clientes {
+
     int id;
     String nombre;
     String telefono;
@@ -17,7 +17,7 @@ public class Cliente {
     String direccion;
     String email;
 
-    public Cliente(int id, String nombre, String telefono, String metodo_pago, String direccion, String email) {
+    public Clientes(int id, String nombre, String telefono, String metodo_pago, String direccion, String email) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -26,7 +26,7 @@ public class Cliente {
         this.email = email;
     }
 
-    public Cliente() {
+    public Clientes() {
     }
 
     public int getId() {
@@ -76,8 +76,5 @@ public class Cliente {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
-    
-    
+
 }

@@ -8,7 +8,7 @@ package Clases;
  *
  * @author Jeanca Barahona
  */
-public class Producto {
+public class Productos {
     
     int id;
     String nombre;
@@ -18,7 +18,7 @@ public class Producto {
     String categoria;
     int precio_compra;
 
-    public Producto(int id, String nombre, String descripcion, int precio_venta, int cantidad, String categoria, int precio_compra) {
+    public Productos(int id, String nombre, String descripcion, int precio_venta, int cantidad, String categoria, int precio_compra) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,7 +28,7 @@ public class Producto {
         this.precio_compra = precio_compra;
     }
 
-    public Producto() {
+    public Productos() {
     }
 
     public int getId() {

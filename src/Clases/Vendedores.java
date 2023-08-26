@@ -8,7 +8,7 @@ package Clases;
  *
  * @author Jeanca Barahona
  */
-public class Vendedor {
+public class Vendedores {
     
     int id;
     String nombre;
@@ -16,7 +16,7 @@ public class Vendedor {
     String direccion;
     String email;
 
-    public Vendedor(int id, String nombre, String telefono, String direccion, String email) {
+    public Vendedores(int id, String nombre, String telefono, String direccion, String email) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
@@ -24,7 +24,7 @@ public class Vendedor {
         this.email = email;
     }
 
-    public Vendedor() {
+    public Vendedores() {
     }
 
     public int getId() {

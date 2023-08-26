@@ -8,7 +8,7 @@ package Clases;
  *
  * @author Jeanca Barahona
  */
-public class Factura {
+public class Facturas {
     
     int id;
     String fecha;
@@ -16,7 +16,7 @@ public class Factura {
     int total;
     String metodo_Pago;
 
-    public Factura(int id, String fecha, String cantidad, int total, String metodo_Pago) {
+    public Facturas(int id, String fecha, String cantidad, int total, String metodo_Pago) {
         this.id = id;
         this.fecha = fecha;
         this.cantidad = cantidad;
@@ -24,7 +24,7 @@ public class Factura {
         this.metodo_Pago = metodo_Pago;
     }
 
-    public Factura() {
+    public Facturas() {
     }
 
     public int getId() {

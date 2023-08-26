@@ -1,40 +1,119 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaces;
 
-import Clases.Encargados_Bodega;
-import Clases.Proveerdor;
-import Conexiones.Encargado_BodegaBD;
+import Clases.Clientes;
+import Conexiones.ClienteBD;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Jeanca Barahona
- */
 public class Cliente extends javax.swing.JFrame {
 
-//    ArrayList<Encargado_Bodega> encargado;
-//    Encaegado_BodegaBD db = new Encaegado_BodegaBD();
+    ArrayList<Clientes> cliente;
+    ClienteBD db = new ClienteBD();
 
     public Cliente() {
         initComponents();
-//        ListarDatos();
+        limpiar();
+        ListarDatos();
         setLocationRelativeTo(null);
         setExtendedState(MAXIMIZED_HORIZ);
         setResizable(true);
         setTitle("Clientes");
     }
 
-//    public void ListarDatos() {
-//        encargado = db.ListEncargado();
-//        DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
-//        for (Encargado_Bodega eb : encargado) {
-//            tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
-//        }
-//    }
+    public void limpiarCampos() {
+        txtID.setText("");
+        txtMetodoPago.setText("");
+        txtDireccion.setText("");
+        txtNombre.setText("");
+        txtEmail.setText("");
+        txtTelefono.setText("");
+    }
+
+    public void ListarDatos() {
+        cliente = db.ListClientes();
+        DefaultTableModel tb = (DefaultTableModel) tablaCliente.getModel();
+        for (Clientes c : cliente) {
+            tb.addRow(new Object[]{c.getId(), c.getNombre(), c.getTelefono(), c.getMetodo_pago(), c.getDireccion(), c.getEmail()});
+        }
+    }
+
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tablaCliente.getModel();
+        for (int i = tb.getRowCount() - 1; i >= 0; i--) {
+            tb.removeRow(i);
+        }
+    }
+
+    public void insertar() {
+        Clientes c = new Clientes();
+        c.setId(Integer.parseInt(txtID.getText()));
+        c.setNombre(txtNombre.getText());
+        c.setTelefono(txtTelefono.getText());
+        c.setMetodo_pago(txtMetodoPago.getText());
+        c.setDireccion(txtDireccion.getText());
+        c.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarCliente(c);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+
+    }
+
+    public void eliminar() {
+
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idProveedor = Integer.parseInt(texto);
+            db.eliminarClientePorID(idProveedor);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+
+        }
+    }
+
+    public void actualizar() {
+        //String id = txtID.getText();
+
+        Clientes c = new Clientes();
+        c.setId(Integer.parseInt(txtID.getText()));
+        c.setNombre(txtNombre.getText());
+        c.setTelefono(txtTelefono.getText());
+        c.setMetodo_pago(txtMetodoPago.getText());
+        c.setDireccion(txtDireccion.getText());
+        c.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarCliente(c);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+    }
+
+    public void buscar() {
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idCliente = Integer.parseInt(texto);
+            Clientes cEncontrado = db.buscarClientePorID(idCliente);
+
+            if (cEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(cEncontrado.getId()));
+                txtNombre.setText(cEncontrado.getNombre());
+                txtTelefono.setText(cEncontrado.getTelefono());
+                txtMetodoPago.setText(cEncontrado.getMetodo_pago());
+                txtDireccion.setText(cEncontrado.getDireccion());
+                txtEmail.setText(cEncontrado.getEmail());
+
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idCliente, "", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,7 +151,7 @@ public class Cliente extends javax.swing.JFrame {
         BtnBuscar = new javax.swing.JButton();
         BtnSalir = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tablaEncargado = new javax.swing.JTable();
+        tablaCliente = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,6 +195,8 @@ public class Cliente extends javax.swing.JFrame {
 
         jScrollPane7.setViewportView(txtMetodoPago);
 
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(204, 204, 204));
         jLabel7.setText("Metodo de Pago");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -268,7 +349,7 @@ public class Cliente extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        tablaEncargado.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -276,7 +357,12 @@ public class Cliente extends javax.swing.JFrame {
                 "ID", "Nombre", "Telefono", "Metodo Pago", "Direccion", "Email"
             }
         ));
-        jScrollPane6.setViewportView(tablaEncargado);
+        tablaCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaClienteMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tablaCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -316,24 +402,49 @@ public class Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
-        //actualizar();
+        actualizar();
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        //insertar();
+        insertar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        //eliminar();
+        eliminar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_BtnSalirActionPerformed
+
+    private void tablaClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaClienteMouseClicked
+        int rowIndex = tablaCliente.getSelectedRow();
+
+        if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+            DefaultTableModel model = (DefaultTableModel) tablaCliente.getModel();
+
+            // Obtener los valores de la fila seleccionada
+            int id = (int) model.getValueAt(rowIndex, 0);
+            String nombre = model.getValueAt(rowIndex, 1).toString();
+            String telefono = model.getValueAt(rowIndex, 2).toString();
+            String metodoP = model.getValueAt(rowIndex, 3).toString();
+            String direccion = model.getValueAt(rowIndex, 4).toString();
+            String email = model.getValueAt(rowIndex, 5).toString();
+
+            // Asignar los valores a los campos de texto correspondientes
+            txtID.setText(String.valueOf(id));
+            txtNombre.setText(nombre);
+            txtTelefono.setText(telefono);
+            txtMetodoPago.setText(metodoP);
+            txtDireccion.setText(direccion);
+            txtEmail.setText(email);
+
+        }
+    }//GEN-LAST:event_tablaClienteMouseClicked
 
     /**
      * @param args the command line arguments
@@ -393,7 +504,7 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTable tablaEncargado;
+    private javax.swing.JTable tablaCliente;
     private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextPane txtEmail;
     private javax.swing.JTextPane txtID;
