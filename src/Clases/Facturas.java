@@ -1,22 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
 
-/**
- *
- * @author Jeanca Barahona
- */
 public class Facturas {
     
     int id;
     String fecha;
-    String cantidad;
+    int cantidad;
     int total;
     String metodo_Pago;
 
-    public Facturas(int id, String fecha, String cantidad, int total, String metodo_Pago) {
+    public Facturas(int id, String fecha, int cantidad, int total, String metodo_Pago) {
         this.id = id;
         this.fecha = fecha;
         this.cantidad = cantidad;
@@ -43,11 +35,11 @@ public class Facturas {
         this.fecha = fecha;
     }
 
-    public String getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 

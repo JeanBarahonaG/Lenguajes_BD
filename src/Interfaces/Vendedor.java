@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaces;
 
-import Clases.Encargados_Bodega;
-import Clases.Proveerdor;
-import Conexiones.Encargado_BodegaBD;
+import Clases.Vendedores;
+import Conexiones.VendedorBD;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,25 +12,107 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Vendedor extends javax.swing.JFrame {
 
-//    ArrayList<Encargado_Bodega> encargado;
-//    Encaegado_BodegaBD db = new Encaegado_BodegaBD();
+    ArrayList<Vendedores> vendedor;
+    VendedorBD db = new VendedorBD();
 
     public Vendedor() {
         initComponents();
-//        ListarDatos();
+        limpiar();
+        ListarDatos();
         setLocationRelativeTo(null);
         setExtendedState(MAXIMIZED_HORIZ);
         setResizable(true);
         setTitle("Vendedor");
     }
 
-//    public void ListarDatos() {
-//        encargado = db.ListEncargado();
-//        DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
-//        for (Encargado_Bodega eb : encargado) {
-//            tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
-//        }
-//    }
+    public void limpiarCampos() {
+        txtID.setText("");
+        txtDireccion.setText("");
+        txtNombre.setText("");
+        txtEmail.setText("");
+        txtTelefono.setText("");
+    }
+
+    public void ListarDatos() {
+        vendedor = db.ListVendedor();
+        DefaultTableModel tb = (DefaultTableModel) tablaVendedor.getModel();
+        for (Vendedores v : vendedor) {
+            tb.addRow(new Object[]{v.getId(), v.getNombre(), v.getTelefono(), v.getDireccion(), v.getEmail()});
+        }
+    }
+
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tablaVendedor.getModel();
+        for (int i = tb.getRowCount() - 1; i >= 0; i--) {
+            tb.removeRow(i);
+        }
+    }
+
+    public void insertar() {
+        Vendedores v = new Vendedores();
+        v.setId(Integer.parseInt(txtID.getText()));
+        v.setNombre(txtNombre.getText());
+        v.setTelefono(txtTelefono.getText());
+        v.setDireccion(txtDireccion.getText());
+        v.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarVendedor(v);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+
+    }
+
+    public void eliminar() {
+
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idVendedor = Integer.parseInt(texto);
+            db.eliminarVendedorPorID(idVendedor);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+
+        }
+    }
+
+    public void actualizar() {
+
+        Vendedores v = new Vendedores();
+        v.setId(Integer.parseInt(txtID.getText()));
+        v.setNombre(txtNombre.getText());
+        v.setTelefono(txtTelefono.getText());
+        v.setDireccion(txtDireccion.getText());
+        v.setEmail(txtEmail.getText());
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarVendedor(v);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+    }
+
+    public void buscar() {
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idVendedor = Integer.parseInt(texto);
+            Vendedores vEncontrado = db.buscarVendedorPorID(idVendedor);
+
+            if (vEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(vEncontrado.getId()));
+                txtNombre.setText(vEncontrado.getNombre());
+                txtTelefono.setText(vEncontrado.getTelefono());
+                txtDireccion.setText(vEncontrado.getDireccion());
+                txtEmail.setText(vEncontrado.getEmail());
+
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idVendedor, "", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,7 +147,7 @@ public class Vendedor extends javax.swing.JFrame {
         BtnBuscar = new javax.swing.JButton();
         BtnSalir = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tablaEncargado = new javax.swing.JTable();
+        tablaVendedor = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -256,7 +334,7 @@ public class Vendedor extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        tablaEncargado.setModel(new javax.swing.table.DefaultTableModel(
+        tablaVendedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -264,7 +342,12 @@ public class Vendedor extends javax.swing.JFrame {
                 "ID", "Nombre", "Telefono", "Direccion", "Email"
             }
         ));
-        jScrollPane6.setViewportView(tablaEncargado);
+        tablaVendedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaVendedorMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tablaVendedor);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -304,24 +387,47 @@ public class Vendedor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
-        //actualizar();
+        actualizar();
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        //insertar();
+        insertar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        //eliminar();
+        eliminar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_BtnSalirActionPerformed
+
+    private void tablaVendedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaVendedorMouseClicked
+        int rowIndex = tablaVendedor.getSelectedRow();
+
+        if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+            DefaultTableModel model = (DefaultTableModel) tablaVendedor.getModel();
+
+            // Obtener los valores de la fila seleccionada
+            int id = (int) model.getValueAt(rowIndex, 0);
+            String nombre = model.getValueAt(rowIndex, 1).toString();
+            String telefono = model.getValueAt(rowIndex, 2).toString();
+            String direc = model.getValueAt(rowIndex, 3).toString();
+            String email = model.getValueAt(rowIndex, 4).toString();
+
+            // Asignar los valores a los campos de texto correspondientes
+            txtID.setText(String.valueOf(id));
+            txtNombre.setText(nombre);
+            txtTelefono.setText(telefono);
+            txtDireccion.setText(direc);
+            txtEmail.setText(email);
+
+        }
+    }//GEN-LAST:event_tablaVendedorMouseClicked
 
     /**
      * @param args the command line arguments
@@ -381,7 +487,7 @@ public class Vendedor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTable tablaEncargado;
+    private javax.swing.JTable tablaVendedor;
     private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextPane txtEmail;
     private javax.swing.JTextPane txtID;

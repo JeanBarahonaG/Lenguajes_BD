@@ -1,40 +1,115 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaces;
 
-import Clases.Encargados_Bodega;
+import Clases.Facturas;
 import Clases.Proveerdor;
-import Conexiones.Encargado_BodegaBD;
+import Conexiones.FacturaBD;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Jeanca Barahona
- */
 public class Factura extends javax.swing.JFrame {
 
-//    ArrayList<Encargado_Bodega> encargado;
-//    Encaegado_BodegaBD db = new Encaegado_BodegaBD();
+    ArrayList<Facturas> factura;
+    FacturaBD db = new FacturaBD();
 
     public Factura() {
         initComponents();
-//        ListarDatos();
+        limpiar();
+        ListarDatos();
         setLocationRelativeTo(null);
         setExtendedState(MAXIMIZED_HORIZ);
         setResizable(true);
         setTitle("Factura");
     }
 
-//    public void ListarDatos() {
-//        encargado = db.ListEncargado();
-//        DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
-//        for (Encargado_Bodega eb : encargado) {
-//            tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
-//        }
-//    }
+    public void limpiarCampos() {
+        txtID.setText("");
+        txtCantidad.setText("");
+        txtFecha.setText("");
+        txtMetodoPago.setText("");
+        txtTotal.setText("");
+    }
+
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tablaFactura.getModel();
+        for (int i = tb.getRowCount() - 1; i >= 0; i--) {
+            tb.removeRow(i);
+        }
+    }
+
+    public void ListarDatos() {
+        factura = db.ListFactura();
+        DefaultTableModel tb = (DefaultTableModel) tablaFactura.getModel();
+        for (Facturas f : factura) {
+            tb.addRow(new Object[]{f.getId(), f.getFecha(), f.getCantidad(), f.getTotal(), f.getMetodo_Pago()});
+        }
+    }
+
+    public void insertar() {
+        Facturas f = new Facturas();
+        f.setId(Integer.parseInt(txtID.getText()));
+        f.setFecha(txtFecha.getText());
+        f.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        f.setTotal(Integer.parseInt(txtTotal.getText()));
+        f.setMetodo_Pago(txtMetodoPago.getText());
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarFactura(f);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+
+    }
+
+    public void eliminar() {
+
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idFactura = Integer.parseInt(texto);
+            db.eliminarFacturaPorID(idFactura);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+
+        }
+    }
+
+    public void actualizar() {
+        //String id = txtID.getText();
+
+        Facturas f = new Facturas();
+        f.setId(Integer.parseInt(txtID.getText()));
+        f.setFecha(txtFecha.getText());
+        f.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        f.setTotal(Integer.parseInt(txtTotal.getText()));
+        f.setMetodo_Pago(txtMetodoPago.getText());
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarFactura(f);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+    }
+
+    public void buscar() {
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idFactura = Integer.parseInt(texto);
+            Facturas fEncontrado = db.buscarFacturaPorID(idFactura);
+
+            if (fEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(fEncontrado.getId()));
+                txtFecha.setText(fEncontrado.getFecha());
+                txtCantidad.setText(String.valueOf(fEncontrado.getCantidad()));
+                txtTotal.setText(String.valueOf(fEncontrado.getTotal()));
+                txtMetodoPago.setText(fEncontrado.getMetodo_Pago());
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idFactura, "", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,7 +144,7 @@ public class Factura extends javax.swing.JFrame {
         BtnBuscar = new javax.swing.JButton();
         BtnSalir = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tablaEncargado = new javax.swing.JTable();
+        tablaFactura = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,6 +180,7 @@ public class Factura extends javax.swing.JFrame {
 
         jScrollPane7.setViewportView(txtTotal);
 
+        jLabel7.setForeground(new java.awt.Color(204, 204, 204));
         jLabel7.setText("Metodo de Pago");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -122,18 +198,14 @@ public class Factura extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addGap(41, 41, 41)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5)
+                    .addComponent(jScrollPane7)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane5)
-                        .addGap(78, 78, 78))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 129, Short.MAX_VALUE)))
-                        .addGap(78, 78, 78))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 129, Short.MAX_VALUE)))
+                .addGap(78, 78, 78))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +318,7 @@ public class Factura extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        tablaEncargado.setModel(new javax.swing.table.DefaultTableModel(
+        tablaFactura.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -254,7 +326,12 @@ public class Factura extends javax.swing.JFrame {
                 "ID", "Fecha", "Cantidad", "Total", "Metodo Pago"
             }
         ));
-        jScrollPane6.setViewportView(tablaEncargado);
+        tablaFactura.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaFacturaMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tablaFactura);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -292,24 +369,46 @@ public class Factura extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
-        //actualizar();
+        actualizar();
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        //insertar();
+        insertar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        //eliminar();
+        eliminar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_BtnSalirActionPerformed
+
+    private void tablaFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaFacturaMouseClicked
+        int rowIndex = tablaFactura.getSelectedRow();
+
+        if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+            DefaultTableModel model = (DefaultTableModel) tablaFactura.getModel();
+
+            // Obtener los valores de la fila seleccionada
+            int id = (int) model.getValueAt(rowIndex, 0);
+            String fecha = model.getValueAt(rowIndex, 1).toString();
+            int cantidad = (int) model.getValueAt(rowIndex, 2);
+            int total = (int) model.getValueAt(rowIndex, 3);
+            String metodo_Pago = model.getValueAt(rowIndex, 4).toString();
+
+            // Asignar los valores a los campos de texto correspondientes
+            txtID.setText(String.valueOf(id));
+            txtFecha.setText(fecha);
+            txtCantidad.setText(String.valueOf(cantidad));
+            txtTotal.setText(String.valueOf(total));
+            txtMetodoPago.setText(metodo_Pago);
+        }
+    }//GEN-LAST:event_tablaFacturaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -369,7 +468,7 @@ public class Factura extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTable tablaEncargado;
+    private javax.swing.JTable tablaFactura;
     private javax.swing.JTextPane txtCantidad;
     private javax.swing.JTextPane txtFecha;
     private javax.swing.JTextPane txtID;

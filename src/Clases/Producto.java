@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
 
-/**
- *
- * @author Jeanca Barahona
- */
-public class Productos {
+public class Producto {
     
     int id;
     String nombre;
@@ -18,7 +10,7 @@ public class Productos {
     String categoria;
     int precio_compra;
 
-    public Productos(int id, String nombre, String descripcion, int precio_venta, int cantidad, String categoria, int precio_compra) {
+    public Producto(int id, String nombre, String descripcion, int precio_venta, int cantidad, String categoria, int precio_compra) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,7 +20,7 @@ public class Productos {
         this.precio_compra = precio_compra;
     }
 
-    public Productos() {
+    public Producto() {
     }
 
     public int getId() {

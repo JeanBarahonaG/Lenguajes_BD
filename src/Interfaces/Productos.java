@@ -1,40 +1,123 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Interfaces;
 
-import Clases.Encargados_Bodega;
-import Clases.Proveerdor;
-import Conexiones.Encargado_BodegaBD;
+import Clases.Producto;
+import Conexiones.ProductosBD;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Jeanca Barahona
- */
 public class Productos extends javax.swing.JFrame {
 
-//    ArrayList<Encargado_Bodega> encargado;
-//    Encaegado_BodegaBD db = new Encaegado_BodegaBD();
+    ArrayList<Producto> producto;
+    ProductosBD db = new ProductosBD();
 
     public Productos() {
         initComponents();
-//        ListarDatos();
+        limpiar();
+        ListarDatos();
         setLocationRelativeTo(null);
         setExtendedState(MAXIMIZED_HORIZ);
         setResizable(true);
         setTitle("Productos");
     }
 
-//    public void ListarDatos() {
-//        encargado = db.ListEncargado();
-//        DefaultTableModel tb = (DefaultTableModel) tablaEncargado.getModel();
-//        for (Encargado_Bodega eb : encargado) {
-//            tb.addRow(new Object[]{eb.getId(), eb.getNombre(), eb.getTelefono(), eb.getDireccion(), eb.getEmail()});
-//        }
-//    }
+    public void limpiarCampos() {
+        txtID.setText("");
+        txtNombre.setText("");
+        txtDescripcion.setText("");
+        txtPrecioVenta.setText("");
+        txtCantidad.setText("");
+        txtCategoria.setText("");
+        txtPrecioCompra.setText("");
+    }
+
+    public void ListarDatos() {
+        producto = db.ListProducto();
+        DefaultTableModel tb = (DefaultTableModel) tablaProducto.getModel();
+        for (Producto p : producto) {
+            tb.addRow(new Object[]{p.getId(), p.getNombre(), p.getDescripcion(), p.getPrecio_venta(), p.getCantidad(), p.getCategoria(), p.getPrecio_compra()});
+        }
+    }
+
+    public void limpiar() {
+        DefaultTableModel tb = (DefaultTableModel) tablaProducto.getModel();
+        for (int i = tb.getRowCount() - 1; i >= 0; i--) {
+            tb.removeRow(i);
+        }
+    }
+
+    public void insertar() {
+        Producto p = new Producto();
+        p.setId(Integer.parseInt(txtID.getText()));
+        p.setNombre(txtNombre.getText());
+        p.setDescripcion(txtDescripcion.getText());
+        p.setPrecio_venta(Integer.parseInt(txtPrecioVenta.getText()));
+        p.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        p.setCategoria(txtCategoria.getText());
+        p.setPrecio_compra(Integer.parseInt(txtPrecioCompra.getText()));
+        JOptionPane.showMessageDialog(this, "Datos Ingresados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.insertarProducto(p);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+
+    }
+
+    public void eliminar() {
+
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idProducto = Integer.parseInt(texto);
+            db.eliminarProductoPorID(idProducto);
+            limpiar();
+            ListarDatos();
+            limpiarCampos();
+
+        }
+    }
+
+    public void actualizar() {
+        //String id = txtID.getText();
+
+        Producto p = new Producto();
+        p.setId(Integer.parseInt(txtID.getText()));
+        p.setNombre(txtNombre.getText());
+        p.setDescripcion(txtDescripcion.getText());
+        p.setPrecio_venta(Integer.parseInt(txtPrecioVenta.getText()));
+        p.setCantidad(Integer.parseInt(txtCantidad.getText()));
+        p.setCategoria(txtCategoria.getText());
+        p.setPrecio_compra(Integer.parseInt(txtPrecioCompra.getText()));
+        JOptionPane.showMessageDialog(this, "Datos actualizados Correctamente", "", JOptionPane.INFORMATION_MESSAGE);
+        db.modificarProducto(p);
+        limpiar();
+        ListarDatos();
+        limpiarCampos();
+    }
+
+    public void buscar() {
+        String texto = txtID.getText();
+        if (!texto.isEmpty()) {
+            int idProducto = Integer.parseInt(texto);
+            Producto pEncontrado = db.buscarProductoPorID(idProducto);
+
+            if (pEncontrado != null) {
+                // Si el proveedor es encontrado, mostramos sus datos en los campos de la interfaz
+                txtID.setText(String.valueOf(pEncontrado.getId()));
+                txtNombre.setText(pEncontrado.getNombre());
+                txtDescripcion.setText(pEncontrado.getDescripcion());
+                txtPrecioVenta.setText(String.valueOf(pEncontrado.getPrecio_venta()));
+                txtCantidad.setText(String.valueOf(pEncontrado.getCantidad()));
+                txtCategoria.setText(pEncontrado.getCategoria());
+                txtPrecioCompra.setText(String.valueOf(pEncontrado.getPrecio_compra()));
+
+                JOptionPane.showMessageDialog(this, "Proveedor encontrado", "", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró ningún proveedor con el ID " + idProducto, "", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un ID válido", "", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,7 +158,7 @@ public class Productos extends javax.swing.JFrame {
         BtnBuscar = new javax.swing.JButton();
         BtnSalir = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tablaEncargado = new javax.swing.JTable();
+        tablaProducto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -111,14 +194,17 @@ public class Productos extends javax.swing.JFrame {
 
         jScrollPane7.setViewportView(txtPrecioVenta);
 
+        jLabel7.setForeground(new java.awt.Color(204, 204, 204));
         jLabel7.setText("Precio de Venta");
 
+        jLabel8.setForeground(new java.awt.Color(204, 204, 204));
         jLabel8.setText("Categoria");
 
         jScrollPane8.setViewportView(txtCategoria);
 
         jScrollPane9.setViewportView(txtPrecioCompra);
 
+        jLabel9.setForeground(new java.awt.Color(204, 204, 204));
         jLabel9.setText("Precio de Compra");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -272,7 +358,7 @@ public class Productos extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        tablaEncargado.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -280,7 +366,12 @@ public class Productos extends javax.swing.JFrame {
                 "ID", "Nombre", "Descripcion", "Precio de la Venta", "Cantidad", "Categoria", "Precio de Compra"
             }
         ));
-        jScrollPane6.setViewportView(tablaEncargado);
+        tablaProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaProductoMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tablaProducto);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -318,24 +409,50 @@ public class Productos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDKeyReleased
 
     private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
-        //actualizar();
+        actualizar();
     }//GEN-LAST:event_BtnActualizarActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
-        //insertar();
+        insertar();
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
     private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
-        //eliminar();
+        eliminar();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
     private void BtnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarActionPerformed
-        // TODO add your handling code here:
+        buscar();
     }//GEN-LAST:event_BtnBuscarActionPerformed
 
     private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_BtnSalirActionPerformed
+
+    private void tablaProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaProductoMouseClicked
+        int rowIndex = tablaProducto.getSelectedRow();
+
+        if (rowIndex >= 0) { // Se verifica si se ha seleccionado una fila válida
+            DefaultTableModel model = (DefaultTableModel) tablaProducto.getModel();
+
+            // Obtener los valores de la fila seleccionada
+            int id = (int) model.getValueAt(rowIndex, 0);
+            String nombre = model.getValueAt(rowIndex, 1).toString();
+            String descripcion = model.getValueAt(rowIndex, 2).toString();
+            int precio_venta = (int) model.getValueAt(rowIndex, 3);
+            int cantidad = (int) model.getValueAt(rowIndex, 4);
+            String categoria = model.getValueAt(rowIndex, 5).toString();
+            int precio_compra = (int) model.getValueAt(rowIndex, 6);
+
+            // Asignar los valores a los campos de texto correspondientes
+            txtID.setText(String.valueOf(id));
+            txtNombre.setText(nombre);
+            txtDescripcion.setText(descripcion);
+            txtPrecioVenta.setText(String.valueOf(precio_venta));
+            txtCantidad.setText(String.valueOf(cantidad));
+            txtCategoria.setText(categoria);
+            txtPrecioCompra.setText(String.valueOf(precio_compra));
+        }
+    }//GEN-LAST:event_tablaProductoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -354,14 +471,18 @@ public class Productos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Producto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -399,7 +520,7 @@ public class Productos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTable tablaEncargado;
+    private javax.swing.JTable tablaProducto;
     private javax.swing.JTextPane txtCantidad;
     private javax.swing.JTextPane txtCategoria;
     private javax.swing.JTextPane txtDescripcion;
